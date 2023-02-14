@@ -6,11 +6,13 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.aloisiomartinez.todolist.databinding.ResItemTaskBinding
 
 
 class TaskAdapter(
+    private val onClick: (Task) -> Unit,
     private val onDeleteClick: (Task) -> Unit
 ) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
@@ -32,11 +34,25 @@ class TaskAdapter(
 
         fun bind(
             task: Task,
-            onDeleteClick: (Task) -> Unit
+            onDeleteClick: (Task) -> Unit,
+            onClick: (Task) -> Unit
         ) {
             tvTitleTask.text = task.title
             imgBtnDeleteTask.setOnClickListener {
                 onDeleteClick(task)
+            }
+            clTask.setOnClickListener {
+                onClick(task)
+            }
+
+            if(task.done) {
+                tvTitleTask.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
+                imgBtnDeleteTask.setImageResource(R.drawable.delete_white)
+                clTask.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.success_green))
+            } else {
+                tvTitleTask.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
+                imgBtnDeleteTask.setImageResource(R.drawable.delete_black)
+                clTask.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.bright_gray))
             }
 
         }
@@ -56,7 +72,8 @@ class TaskAdapter(
 
         holder.bind(
             tasks[position],
-            onDeleteClick
+            onDeleteClick,
+            onClick
         )
 
     }
@@ -75,6 +92,13 @@ class TaskAdapter(
         val deletedPosition = tasks.indexOf(task)
         tasks.remove(task)
         notifyItemRemoved(deletedPosition)
+
+    }
+
+    fun updateTask(task: Task) {
+        val updatedPosition = tasks.indexOf(task)
+        tasks[updatedPosition] = task
+        notifyItemChanged(updatedPosition)
 
     }
 
