@@ -102,4 +102,6 @@ class TaskAdapter(
 
     }
 
+    fun isEmpty() = tasks.isEmpty()
+
 }
