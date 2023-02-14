@@ -1,5 +1,6 @@
 package com.aloisiomartinez.todolist
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -24,14 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupLayout() {
         binding.fabNewTask.setOnClickListener {
-            val rand = (1..100).random()
-
-            adapter.addTask(
-                Task(
-                    "titulo $rand",
-                    "Teste"
-                )
-            )
+           startActivity(Intent(this, NewTaskActivity::class.java))
         }
     }
 
